@@ -6,6 +6,13 @@ const Chatbot = () => {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
 
+  const formatBotResponse = (response) => {
+    // Split the response text by newlines
+    const lines = response.split('\n');
+    // Create a <div> element for each line
+    return lines.map((line, index) => <div key={index}>{line}</div>);
+  };
+
   const sendMessage = async () => {
     if (inputValue.trim() === '') return;
 
@@ -16,9 +23,14 @@ const Chatbot = () => {
 
     // Make the API call to the Flask server
     try {
-      const response = await axios.post('http://127.0.0.1:5000/api/chatbot', { message: inputValue });
-      const botMessage = { text: response.data.message, fromUser: false };
-      setMessages([...messages, botMessage]);
+      const response = await axios.post('http://127.0.0.1:5000/api/chatbot', {
+        message: inputValue
+      });
+
+      // Format the bot's response before setting it in the state
+      const formattedResponse = formatBotResponse(response.data.message);
+      const botMessage = { text: formattedResponse, fromUser: false };
+      setMessages((prevMessages) => [...prevMessages, botMessage]);
     } catch (error) {
       console.error('Error sending message:', error);
     }

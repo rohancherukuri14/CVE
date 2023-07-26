@@ -5,6 +5,7 @@ import sys
 import utils
 import json
 from flask_cors import CORS
+import re
 
 app = Flask(__name__)
 CORS(app, origins='http://localhost:3000', allow_headers=["Content-Type"])
@@ -47,7 +48,7 @@ def get_response(code):
         model = "gpt-3.5-turbo",
         messages = message,
     )
-    return completion.choices[0].message["content"]
+    return re.sub(r'(\d+\.)', r'\n\1', completion.choices[0].message["content"])
 
 
 if __name__ == '__main__':
