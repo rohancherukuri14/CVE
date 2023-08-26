@@ -50,7 +50,7 @@ for index, row in code_fixes.iterrows():
         count += 1
         entry = {
             "messages": [
-                {"role": "system", "content": "Prove new code to fix the vulnerabilities in the code given."},
+                {"role": "system", "content": "Provide new code to fix the vulnerabilities in the code given."},
                 {"role": "user", "content": row['code_before']},
                 {"role": "assistant", "content": row['code_after']}
             ]
