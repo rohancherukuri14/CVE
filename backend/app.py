@@ -42,10 +42,10 @@ def run_chatbot():
 
 
 def get_response(code):
-    message = [{"role": "system", "content" : "Provide new code to fix the vulnerabilities in the code given."},
+    message = [{"role": "system", "content" : "Provide a description of the vulnerabilities of the given code and provide new code to fix the vulnerabilities in the code given."},
                 {"role": "user", "content" : code}]
     completion = openai.ChatCompletion.create(
-        model = "ft:gpt-3.5-turbo-0613:fittedai::7rhw2sBy",
+        model = "ft:gpt-3.5-turbo-0613:fittedai::7sIwLFz3",
         messages = message,
     )
     return re.sub(r'(\d+\.)', r'\n\1', completion.choices[0].message["content"])

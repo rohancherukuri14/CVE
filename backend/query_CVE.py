@@ -32,7 +32,7 @@ def create_connection(db_file):
 conn = create_connection("CVEfixes.db")
 
 query = """
-SELECT  f.code_before, f.code_after, cw.extended_description
+SELECT  f.code_before, f.code_after, cw.description
 FROM file_change f, commits c, fixes fx, cve cv, cwe_classification cc, cwe cw
 WHERE f.hash = c.hash 
 AND c.hash = fx.hash 
@@ -52,11 +52,11 @@ json_entries = []
 
 count = 0
 for index, row in code_fixes.iterrows():
-    if len(row['code_before']) < 4000 and len(row['code_after']) < 1000 and len(row['extended_description']) > 5 and "Insufficient Information" not in row['extended_description']:
+    if len(row['code_before']) < 4000 and len(row['code_after']) < 1000 and len(row['description']) > 5 and "Insufficient Information" not in row['description']:
         count += 1
-        entry = {"messages": [{"role": "system", "content": "Provide a description of the vulnerabilities of the given code and provide new code to fix the vulnerabilities in the code given."},{"role": "user", "content": row['code_before']},{"role": "assistant", "content": row['extended_description'] + "Here is the fixed code: " + row['code_after']}]}
+        entry = {"messages": [{"role": "system", "content": "Provide a description of the vulnerabilities of the given code and provide new code to fix the vulnerabilities in the code given."},{"role": "user", "content": row['code_before']},{"role": "assistant", "content": row['description'] + "Here is the fixed code: " + row['code_after']}]}
         json_entries.append(entry)
-    if count > 1099:
+    if count > 24:
         break
 
 print(count)
@@ -68,8 +68,8 @@ def prepare_data(dictionary_data, final_file_name):
             outfile.write('\n')       
 
 # Write the JSON entries to a file
-prepare_data(json_entries[:1000], "output_temp.jsonl")
-prepare_data(json_entries[1000:], "validation_temp.jsonl")
+prepare_data(json_entries[:20], "output_temp.jsonl")
+prepare_data(json_entries[20:], "validation_temp.jsonl")
 
 
 def process_content(content):
