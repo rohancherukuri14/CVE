@@ -54,7 +54,7 @@ count = 0
 for index, row in code_fixes.iterrows():
     if len(row['code_before']) < 4000 and len(row['code_after']) < 1000 and len(row['extended_description']) > 5 and "Insufficient Information" not in row['extended_description']:
         count += 1
-        entry = {"messages": [{"role": "system", "content": "Provide a descrition of the vulnerabilities of the given code and provide new code to fix the vulnerabilities in the code given."},{"role": "user", "content": row['code_before']},{"role": "assistant", "content": row['extended_description'] + "Here is the fixed code: " + row['code_after']}]}
+        entry = {"messages": [{"role": "system", "content": "Provide a description of the vulnerabilities of the given code and provide new code to fix the vulnerabilities in the code given."},{"role": "user", "content": row['code_before']},{"role": "assistant", "content": row['extended_description'] + "Here is the fixed code: " + row['code_after']}]}
         json_entries.append(entry)
     if count > 1099:
         break
